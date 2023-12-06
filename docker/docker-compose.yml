@@ -7,16 +7,16 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./projet_perso2:/var/www/myapp
+      - ./php:/var/www/myapp
       - ./docker/site.conf:/etc/nginx/conf.d/site.conf
     depends_on:
       - php
       - mariadb
 
   php:
-    image: php:8.2-fpm
+    image: php:7.2-fpm
     volumes:
-      - ./projet_perso2:/var/www/myapp
+      - ./project_perso2:/var/www/myapp
       - ./docker/php.ini:/usr/local/etc/php/php.ini
     depends_on:
       - mariadb
@@ -24,8 +24,10 @@ services:
   mariadb:
     image: mariadb:10.4
     restart: always
+    command: "mysqld --init-file /data/application/init.sql"
     volumes:
       - mariadb-data:/var/lib/mysql
+      - ./init.sql:/data/application/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: qwerty
 
